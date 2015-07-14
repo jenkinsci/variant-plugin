@@ -1,9 +1,11 @@
 package org.jenkinsci.plugins.multimode;
 
 import hudson.model.Action;
-import org.jenkinsci.plugins.multimode.test.TestRootAction;
+import org.jenkinsci.plugins.multimode.test.SampleRootAction;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
@@ -15,16 +17,20 @@ public class MultiModeTest extends Assert {
     @Rule
     public JenkinsRule j = new JenkinsRule();
 
-    @Before
-    public void setUp() {
-        MultiModeExtensionProcessor.ACTIVE.clear();
-        MultiModeExtensionProcessor.VARIANTS.add("test");
+    @BeforeClass
+    public static void setUp() {
+        MultimodeExtensionFinder.PROBE_VARIANT = "test";
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        MultimodeExtensionFinder.PROBE_VARIANT = null;
     }
 
     @Test
     public void test() {
         for (Action a : j.jenkins.getActions()) {
-            if (a.getClass()== TestRootAction.class)
+            if (a.getClass()==SampleRootAction.class)
                 return; // test pass
         }
         fail("Expecting to see TestRootAction");
