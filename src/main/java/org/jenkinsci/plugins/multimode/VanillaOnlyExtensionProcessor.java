@@ -3,6 +3,8 @@ package org.jenkinsci.plugins.multimode;
 import hudson.Extension;
 
 /**
+ * Glue code that activates {@link VanillaOnlyExtension}.
+ *
  * @author Kohsuke Kawaguchi
  */
 @Extension
