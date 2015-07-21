@@ -19,12 +19,12 @@ public class MultiModeTest extends Assert {
 
     @BeforeClass
     public static void setUp() {
-        MultimodeExtensionFinder.PROBE_VARIANT = "test";
+        VariantSet.INSTANCE = new VariantSet("test");
     }
 
     @AfterClass
     public static void tearDown() {
-        MultimodeExtensionFinder.PROBE_VARIANT = null;
+        VariantSet.INSTANCE = new VariantSet();
     }
 
     @Test

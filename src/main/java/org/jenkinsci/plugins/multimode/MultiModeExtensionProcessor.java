@@ -8,32 +8,32 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Makes Jenkins recognize annotations with {@link OnlyFor}.
+ * Makes Jenkins recognize custom extension annotation.
  *
  * @author Kohsuke Kawaguchi
  */
-class MultiModeExtensionProcessor<T extends Annotation> extends GuiceExtensionAnnotation<T> {
-    /**
-     * Factory method for better compiler type inference.
-     */
-    static <T extends Annotation> MultiModeExtensionProcessor<T> make(Class<T> t) {
-        return new MultiModeExtensionProcessor<T>(t);
-    }
-
+public abstract class MultiModeExtensionProcessor<T extends Annotation> extends GuiceExtensionAnnotation<T> {
     private final Method ordinal;
     private final Method optional;
+    private final boolean active;
 
-    public MultiModeExtensionProcessor(Class<T> type) {
+    /*package*/ final String name;
+
+    public MultiModeExtensionProcessor(Class<T> type, String name) {
         super(type);
+        this.name = name;
 
         ordinal  = getMethod("ordinal",double.class);
         optional = getMethod("optional", boolean.class);
+        active = VariantSet.INSTANCE.isActive(this);
+
+        // TODO: check if 'type' is properly annotated
     }
 
     private Method getMethod(String name, Class returnType) {
         try {
             Method m = annotationType.getMethod(name);
-            Class<?> actual = ordinal.getReturnType();
+            Class<?> actual = m.getReturnType();
             if (actual!=returnType)
                 throw new IllegalStateException(m+" expected to return "+returnType+" but found "+actual);
             return m;
@@ -68,7 +68,7 @@ class MultiModeExtensionProcessor<T extends Annotation> extends GuiceExtensionAn
 
     @Override
     protected boolean isActive(AnnotatedElement e) {
-        return true;
+        return active;
     }
 
     private void eat(Throwable t) {
