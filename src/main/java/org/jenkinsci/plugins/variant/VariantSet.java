@@ -1,7 +1,6 @@
-package org.jenkinsci.plugins.multimode;
+package org.jenkinsci.plugins.variant;
 
 import jenkins.model.Jenkins;
-import org.apache.tools.ant.util.XMLFragment.Child;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +46,7 @@ public class VariantSet {
     /**
      * Decide if the given custom extension annotation is active in this JVM or not.
      */
-    protected boolean isActive(MultiModeExtensionProcessor t) {
+    protected boolean isActive(VariantExtensionProcessor t) {
         return contains(t.name);
     }
 

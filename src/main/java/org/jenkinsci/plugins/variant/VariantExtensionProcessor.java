@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.multimode;
+package org.jenkinsci.plugins.variant;
 
 import hudson.ExtensionFinder.GuiceExtensionAnnotation;
 
@@ -12,14 +12,14 @@ import java.lang.reflect.Method;
  *
  * @author Kohsuke Kawaguchi
  */
-public abstract class MultiModeExtensionProcessor<T extends Annotation> extends GuiceExtensionAnnotation<T> {
+public abstract class VariantExtensionProcessor<T extends Annotation> extends GuiceExtensionAnnotation<T> {
     private final Method ordinal;
     private final Method optional;
     private final boolean active;
 
     /*package*/ final String name;
 
-    public MultiModeExtensionProcessor(Class<T> type, String name) {
+    public VariantExtensionProcessor(Class<T> type, String name) {
         super(type);
         this.name = name;
 

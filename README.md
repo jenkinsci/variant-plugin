@@ -36,8 +36,8 @@ The processor is defined as follows. Aside from specifying the type of the annot
 above, you also specify the name of the variant. In this example, the variant is named "cjoc":
 ```
 @Extension
-public class CjocExtensionProcessor extends MultiModeExtensionProcessor<CjocExtension> {
-    public VanillaOnlyExtensionProcessor() {
+public class CjocExtensionProcessor extends VariantExtensionProcessor<CjocExtension> {
+    public CjocExtensionProcessor() {
         super(CjocExtension.class, "cjoc");
     }
 }

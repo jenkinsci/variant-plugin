@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.multimode.test;
+package org.jenkinsci.plugins.variant.test;
 
 import net.java.sezpoz.Indexable;
 

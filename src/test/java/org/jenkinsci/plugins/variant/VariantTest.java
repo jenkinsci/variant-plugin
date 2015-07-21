@@ -1,10 +1,9 @@
-package org.jenkinsci.plugins.multimode;
+package org.jenkinsci.plugins.variant;
 
 import hudson.model.Action;
-import org.jenkinsci.plugins.multimode.test.SampleRootAction;
+import org.jenkinsci.plugins.variant.test.SampleRootAction;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,7 +12,7 @@ import org.jvnet.hudson.test.JenkinsRule;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class MultiModeTest extends Assert {
+public class VariantTest extends Assert {
     @Rule
     public JenkinsRule j = new JenkinsRule();
 

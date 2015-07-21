@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.multimode.test;
+package org.jenkinsci.plugins.variant.test;
 
 import hudson.model.RootAction;
 import jenkins.model.Jenkins;

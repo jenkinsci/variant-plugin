@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.multimode;
+package org.jenkinsci.plugins.variant;
 
 import hudson.Extension;
 
@@ -8,7 +8,7 @@ import hudson.Extension;
  * @author Kohsuke Kawaguchi
  */
 @Extension
-public class VanillaOnlyExtensionProcessor extends MultiModeExtensionProcessor<VanillaOnlyExtension> {
+public class VanillaOnlyExtensionProcessor extends VariantExtensionProcessor<VanillaOnlyExtension> {
     public VanillaOnlyExtensionProcessor() {
         super(VanillaOnlyExtension.class, VanillaOnlyExtension.NAME);
     }
