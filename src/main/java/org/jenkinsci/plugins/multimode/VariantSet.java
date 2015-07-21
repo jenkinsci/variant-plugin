@@ -1,7 +1,9 @@
 package org.jenkinsci.plugins.multimode;
 
 import jenkins.model.Jenkins;
+import org.apache.tools.ant.util.XMLFragment.Child;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -76,6 +78,13 @@ public class VariantSet {
                 LOGGER.log(Level.WARNING, "Failed to parse Jenkins-Variants from manifest", e);
             } finally {
                 closeQuietly(in);
+            }
+
+            File[] children = new File(j.getRootDir(),"variants").listFiles();
+            if (children!=null) {
+                for (File ch : children) {
+                    values.add(ch.getName());
+                }
             }
         }
 
