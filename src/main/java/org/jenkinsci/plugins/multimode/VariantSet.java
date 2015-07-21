@@ -18,7 +18,8 @@ import static org.apache.commons.io.IOUtils.*;
  *
  * @author Kohsuke Kawaguchi
  */
-class VariantSet {
+// can't do @Extension because this needs to be instantiated before the IoC container gets initialized
+public class VariantSet {
     // not final for tests
     /*package*/ static VariantSet INSTANCE = VariantSet.makeDefault();
 
@@ -26,6 +27,13 @@ class VariantSet {
 
     VariantSet(String... values) {
         activeVariants.addAll(Arrays.asList(values));
+    }
+
+    /**
+     * Gets a singleton instance.
+     */
+    public VariantSet getInstance() {
+        return INSTANCE;
     }
 
     static VariantSet makeDefault() {
@@ -38,7 +46,14 @@ class VariantSet {
      * Decide if the given custom extension annotation is active in this JVM or not.
      */
     protected boolean isActive(MultiModeExtensionProcessor t) {
-        return activeVariants.contains(t.name);
+        return contains(t.name);
+    }
+
+    /**
+     * Determines if a variant of the given name is active in this JVM.
+     */
+    public boolean contains(String name) {
+        return activeVariants.contains(name);
     }
 
     /**
