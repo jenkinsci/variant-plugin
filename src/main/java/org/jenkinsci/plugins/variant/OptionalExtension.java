@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.variant;
 
+import hudson.Extension;
 import net.java.sezpoz.Indexable;
 
 import java.lang.annotation.Documented;
@@ -7,11 +8,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Allows extensions to activate only when no variant is explicitly specified. That is,
- * a normal plain-vanilla Jenkins.
+ * Works like {@link Extension} except the activation of the extension is contingent
+ * on the presence of specific requirePlugins and/or classes.
  *
  * @author Kohsuke Kawaguchi
  */
@@ -19,7 +20,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 @Retention(RUNTIME)
 @Target({TYPE,METHOD,FIELD})
 @Documented
-public @interface VanillaOnlyExtension {
+public @interface OptionalExtension {
     /**
      * Used for sorting extensions.
      *
@@ -29,13 +30,12 @@ public @interface VanillaOnlyExtension {
     double ordinal() default 0;
 
     /**
-     * If an extension is optional, don't log any class loading errors when reading it.
+     * Short names of the plugins that are required to trigger this extension.
      */
-    boolean optional() default false;
+    String[] requirePlugins() default {};
 
     /**
-     * Variant name for this annotation. This is a special pseudo-name because
-     * it gets activated when no other variants are given.
+     * Classes that are required to activate this extension.
      */
-    String NAME = "vanilla";
+    Class[] requireClasses() default {};
 }
