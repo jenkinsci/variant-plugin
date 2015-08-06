@@ -38,4 +38,9 @@ public @interface OptionalExtension {
      * Classes that are required to activate this extension.
      */
     Class[] requireClasses() default {};
+
+    /**
+     * Variants that are required to activate this extension.
+     */
+    String[] requireVariants() default {};
 }

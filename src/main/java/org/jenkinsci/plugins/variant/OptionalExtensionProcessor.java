@@ -52,6 +52,10 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
             if (p==null || !p.isActive())    return false;
         }
 
+        for (String name : a.requireVariants()) {
+            if (!VariantSet.INSTANCE.contains(name))    return false;
+        }
+
         return true;
     }
 }

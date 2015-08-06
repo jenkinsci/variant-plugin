@@ -18,6 +18,17 @@ public class VariantTest extends Assert {
     @Rule
     public JenkinsRule j = new JenkinsRule();
 
+
+    @BeforeClass
+    public static void setUp() {
+        VariantSet.INSTANCE = new VariantSet("test");
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        VariantSet.INSTANCE = new VariantSet();
+    }
+
     @Test
     public void test() {
         List<Class> classes = new ArrayList<Class>();
@@ -26,6 +37,8 @@ public class VariantTest extends Assert {
         }
         assertTrue(classes.contains(Positive1.class));
         assertTrue(classes.contains(Positive2.class));
+        assertTrue(classes.contains(Positive3.class));
         assertTrue(!classes.contains(Negative1.class));
+        assertTrue(!classes.contains(Negative2.class));
     }
 }
