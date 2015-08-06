@@ -1,13 +1,15 @@
 package org.jenkinsci.plugins.variant;
 
 import hudson.model.Action;
-import org.jenkinsci.plugins.variant.test.SampleRootAction;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -16,22 +18,14 @@ public class VariantTest extends Assert {
     @Rule
     public JenkinsRule j = new JenkinsRule();
 
-    @BeforeClass
-    public static void setUp() {
-        VariantSet.INSTANCE = new VariantSet("test");
-    }
-
-    @AfterClass
-    public static void tearDown() {
-        VariantSet.INSTANCE = new VariantSet();
-    }
-
     @Test
     public void test() {
+        List<Class> classes = new ArrayList<Class>();
         for (Action a : j.jenkins.getActions()) {
-            if (a.getClass()==SampleRootAction.class)
-                return; // test pass
+            classes.add(a.getClass());
         }
-        fail("Expecting to see TestRootAction");
+        assertTrue(classes.contains(Positive1.class));
+        assertTrue(classes.contains(Positive2.class));
+        assertTrue(!classes.contains(Negative1.class));
     }
 }
