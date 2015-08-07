@@ -18,6 +18,9 @@ Optional extensions can be activated by one of the following conditions:
 * Presence of a class
 * Presence of a "variant" in the environment.
 
+### Package for optional extension
+
+
 ## Activating variants
 Active variants can be selected in several ways. Multiple variants can be independently activated.
 All of the variants activated in these different ways are combined together to form the effective variant set.

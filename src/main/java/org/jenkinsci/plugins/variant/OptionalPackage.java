@@ -1,8 +1,5 @@
 package org.jenkinsci.plugins.variant;
 
-import hudson.Extension;
-import net.java.sezpoz.Indexable;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -11,17 +8,15 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Works like {@link Extension} except the activation of the extension is contingent
- * on the presence of specific requirePlugins and/or classes.
+ * Works in conjunction with {@link OptionalExtension} to allow you to turn
+ * the entire packages conditional.
  *
  * @author Kohsuke Kawaguchi
- * @see OptionalPackage
  */
-@Indexable
 @Retention(RUNTIME)
-@Target({TYPE,METHOD,FIELD})
+@Target({PACKAGE})
 @Documented
-public @interface OptionalExtension {
+public @interface OptionalPackage {
     /**
      * Used for sorting extensions.
      *
