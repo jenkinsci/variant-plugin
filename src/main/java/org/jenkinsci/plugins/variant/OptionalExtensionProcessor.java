@@ -6,7 +6,9 @@ import hudson.PluginWrapper;
 import jenkins.model.Jenkins;
 
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 
 /**
  * Processes extensions marked with {@link OptionalExtension} and decides when they are activated.
@@ -42,11 +44,13 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
     @Override
     protected boolean isActive(AnnotatedElement e) {
         System.out.println(e);
-        for (; e!=null; e=getParentOf(e)) {
+        ClassLoader cl = getClassLoaderOf(e);
+        for (; e!=null; e=getParentOf(e,cl)) {
             OptionalExtension a = e.getAnnotation(OptionalExtension.class);
             if (a!=null && !isActive(a))    return false;
 
             OptionalPackage b = e.getAnnotation(OptionalPackage.class);
+            if (b!=null)        System.out.println("Considering "+b+" on "+e);
             if (b!=null && !isActive(b))    return false;
         }
 
@@ -102,7 +106,7 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
      *
      * @return null if we hit the root.
      */
-    private AnnotatedElement getParentOf(AnnotatedElement e) {
+    private AnnotatedElement getParentOf(AnnotatedElement e, ClassLoader cl) {
         if (e instanceof Member)
             return ((Member)e).getDeclaringClass();
         if (e instanceof  Class)
@@ -114,11 +118,37 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
                 int idx = name.lastIndexOf('.');
                 if (idx<0)      return null;
                 name = name.substring(0, idx);
-                Package pkg = Package.getPackage(name);
-                if (pkg!=null)  return pkg;
+                try {
+                    Package pkg = cl!=null ? (Package)getPackage.invoke(cl,name) : Package.getPackage(name);
+                    if (pkg!=null)  return pkg;
+                } catch (IllegalAccessException _) {
+                    return null;
+                } catch (InvocationTargetException e1) {
+                    return null;
+                }
             }
         }
 
         return null;
+    }
+
+    private ClassLoader getClassLoaderOf(AnnotatedElement e) {
+        if (e instanceof Member)
+            return getClassLoaderOf(((Member) e).getDeclaringClass());
+        if (e instanceof  Class)
+            return ((Class)e).getClassLoader();
+
+        return null;
+    }
+
+    private static final Method getPackage;
+
+    static {
+        try {
+            getPackage = ClassLoader.class.getDeclaredMethod("getPackage",String.class);
+            getPackage.setAccessible(true);
+        } catch (NoSuchMethodException e) {
+            throw new Error(e);
+        }
     }
 }
