@@ -11,20 +11,17 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Works in conjunction with {@link OptionalExtension} to allow you to turn
  * the entire packages conditional.
  *
+ * <p>
+ * This annotation is only effective for classes that are direct members of the package.
+ * For example, if you put this annotation on {@code com.example}, {@code com.example.sub.Foo}
+ * will not be affected. This is due to the way Java package works.
+ *
  * @author Kohsuke Kawaguchi
  */
 @Retention(RUNTIME)
 @Target({PACKAGE})
 @Documented
 public @interface OptionalPackage {
-    /**
-     * Used for sorting extensions.
-     *
-     * Extensions will be sorted in the descending order of the ordinal.
-     * This is a rather poor approach to the problem, so its use is generally discouraged.
-     */
-    double ordinal() default 0;
-
     /**
      * Short names of the plugins that are required to trigger this extension.
      */

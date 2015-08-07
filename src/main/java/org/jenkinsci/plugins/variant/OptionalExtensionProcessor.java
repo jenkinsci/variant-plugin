@@ -6,9 +6,7 @@ import hudson.PluginWrapper;
 import jenkins.model.Jenkins;
 
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
-import java.lang.reflect.Method;
 
 /**
  * Processes extensions marked with {@link OptionalExtension} and decides when they are activated.
@@ -43,14 +41,11 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
      */
     @Override
     protected boolean isActive(AnnotatedElement e) {
-        System.out.println(e);
-        ClassLoader cl = getClassLoaderOf(e);
-        for (; e!=null; e=getParentOf(e,cl)) {
+        for (; e!=null; e=getParentOf(e)) {
             OptionalExtension a = e.getAnnotation(OptionalExtension.class);
             if (a!=null && !isActive(a))    return false;
 
             OptionalPackage b = e.getAnnotation(OptionalPackage.class);
-            if (b!=null)        System.out.println("Considering "+b+" on "+e);
             if (b!=null && !isActive(b))    return false;
         }
 
@@ -106,49 +101,17 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
      *
      * @return null if we hit the root.
      */
-    private AnnotatedElement getParentOf(AnnotatedElement e, ClassLoader cl) {
+    private AnnotatedElement getParentOf(AnnotatedElement e) {
         if (e instanceof Member)
             return ((Member)e).getDeclaringClass();
         if (e instanceof  Class)
             return ((Class)e).getPackage();
-        if (e instanceof Package) {
-            String name = ((Package) e).getName();
-
-            while (true) {
-                int idx = name.lastIndexOf('.');
-                if (idx<0)      return null;
-                name = name.substring(0, idx);
-                try {
-                    Package pkg = cl!=null ? (Package)getPackage.invoke(cl,name) : Package.getPackage(name);
-                    if (pkg!=null)  return pkg;
-                } catch (IllegalAccessException _) {
-                    return null;
-                } catch (InvocationTargetException e1) {
-                    return null;
-                }
-            }
-        }
+        /*
+        if (e instanceof Package)
+            it is not possible to make recursive parent package look-up works, because in Java,
+            package is only defined when a class is loaded inside it.
+        */
 
         return null;
-    }
-
-    private ClassLoader getClassLoaderOf(AnnotatedElement e) {
-        if (e instanceof Member)
-            return getClassLoaderOf(((Member) e).getDeclaringClass());
-        if (e instanceof  Class)
-            return ((Class)e).getClassLoader();
-
-        return null;
-    }
-
-    private static final Method getPackage;
-
-    static {
-        try {
-            getPackage = ClassLoader.class.getDeclaredMethod("getPackage",String.class);
-            getPackage.setAccessible(true);
-        } catch (NoSuchMethodException e) {
-            throw new Error(e);
-        }
     }
 }
