@@ -33,7 +33,7 @@ public class VariantSet {
     /**
      * Gets a singleton instance.
      */
-    public VariantSet getInstance() {
+    public static VariantSet getInstance() {
         return INSTANCE;
     }
 
