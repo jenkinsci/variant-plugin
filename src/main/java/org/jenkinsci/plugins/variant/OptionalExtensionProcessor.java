@@ -45,21 +45,27 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
      */
     @Override
     protected boolean isActive(AnnotatedElement e) {
-        for (; e!=null; e=getParentOf(e)) {
+        for (; e != null; e = getParentOf(e)) {
             try {
                 OptionalExtension a = e.getAnnotation(OptionalExtension.class);
-                if (a!=null && !isActive(a))    return false;
+                if (a != null && !isActive(a)) {
+                    return false;
+                }
             } catch (ArrayStoreException e1) {
-                //In this case the annotation is referencing a non existent class, make the extension inactive
+                // In this case the annotation is referencing a non existent class, make the extension inactive it is
+                // due to the use of requiredClasses
                 // see http://bugs.java.com/view_bug.do?bug_id=7183985
                 return false;
             }
-            
-            try{
+
+            try {
                 OptionalPackage b = e.getAnnotation(OptionalPackage.class);
-                if (b!=null && !isActive(b))    return false;
+                if (b != null && !isActive(b)) {
+                    return false;
+                }
             } catch (ArrayStoreException e1) {
-                //In this case the annotation is referencing a non existent class, make the extension inactive it due to the use of requiredClasses
+                // In this case the annotation is referencing a non existent class, make the extension inactive it is
+                // due to the use of requiredClasses
                 // see http://bugs.java.com/view_bug.do?bug_id=7183985
                 return false;
             }
