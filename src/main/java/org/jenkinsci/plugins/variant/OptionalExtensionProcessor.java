@@ -79,7 +79,7 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
         try {
             a.requireClasses();
         } catch (ArrayStoreException x) {
-            //In this case the annotation is referencing a non existent class, make the extension inactive
+            // In this case the annotation is referencing a non existent class, make the extension inactive
             // see http://bugs.java.com/view_bug.do?bug_id=7183985
             return false;
         } catch (TypeNotPresentException x) {
@@ -102,7 +102,7 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
         try {
             a.requireClasses();
         } catch (ArrayStoreException x) {
-            //In this case the annotation is referencing a non existent class, make the extension inactive
+            // In this case the annotation is referencing a non existent class, make the extension inactive
             // see http://bugs.java.com/view_bug.do?bug_id=7183985
             return false;
         } catch (TypeNotPresentException x) {
