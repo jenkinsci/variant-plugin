@@ -1,12 +1,12 @@
 package org.jenkinsci.plugins.variant;
 
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Member;
+
 import hudson.Extension;
 import hudson.ExtensionFinder.GuiceExtensionAnnotation;
 import hudson.PluginWrapper;
 import jenkins.model.Jenkins;
-
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Member;
 
 /**
  * Processes extensions marked with {@link OptionalExtension} and decides when they are activated.
@@ -25,13 +25,17 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
     }
 
     /**
-     * If the trigger condition is not met, we filter it by not making the extension active,
-     * which means extensions are always non-optional as far as {@link GuiceExtensionAnnotation}
-     * is concerned.
+     * If the trigger condition is not met, we filter it by not making the extension active, which means extensions
+     * could always be non-optional as far as {@link GuiceExtensionAnnotation} is concerned. But in some situations, the
+     * class cannot even be loaded which would make {@link GuiceExtensionAnnotation} to fail, so we need to also make it
+     * optional.
+     * <p>
+     * See <a href="https://issues.jenkins-ci.org/browse/JENKINS-37317">JENKINS-37317</a>
+     * 
      */
     @Override
     protected boolean isOptional(OptionalExtension annotation) {
-        return false;
+        return true;
     }
 
     /**
@@ -42,11 +46,23 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
     @Override
     protected boolean isActive(AnnotatedElement e) {
         for (; e!=null; e=getParentOf(e)) {
-            OptionalExtension a = e.getAnnotation(OptionalExtension.class);
-            if (a!=null && !isActive(a))    return false;
-
-            OptionalPackage b = e.getAnnotation(OptionalPackage.class);
-            if (b!=null && !isActive(b))    return false;
+            try {
+                OptionalExtension a = e.getAnnotation(OptionalExtension.class);
+                if (a!=null && !isActive(a))    return false;
+            } catch (ArrayStoreException e1) {
+                //In this case the annotation is referencing a non existent class, make the extension inactive
+                // see http://bugs.java.com/view_bug.do?bug_id=7183985
+                return false;
+            }
+            
+            try{
+                OptionalPackage b = e.getAnnotation(OptionalPackage.class);
+                if (b!=null && !isActive(b))    return false;
+            } catch (ArrayStoreException e1) {
+                //In this case the annotation is referencing a non existent class, make the extension inactive it due to the use of requiredClasses
+                // see http://bugs.java.com/view_bug.do?bug_id=7183985
+                return false;
+            }
         }
 
         return true;
@@ -57,10 +73,11 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
         try {
             a.requireClasses();
         } catch (ArrayStoreException x) {
+            //In this case the annotation is referencing a non existent class, make the extension inactive
             // see http://bugs.java.com/view_bug.do?bug_id=7183985
-            return true;
+            return false;
         } catch (TypeNotPresentException x) {
-            return true;
+            return false;
         }
 
         for (String name : a.requirePlugins()) {
@@ -79,10 +96,11 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
         try {
             a.requireClasses();
         } catch (ArrayStoreException x) {
+            //In this case the annotation is referencing a non existent class, make the extension inactive
             // see http://bugs.java.com/view_bug.do?bug_id=7183985
-            return true;
+            return false;
         } catch (TypeNotPresentException x) {
-            return true;
+            return false;
         }
 
         for (String name : a.requirePlugins()) {

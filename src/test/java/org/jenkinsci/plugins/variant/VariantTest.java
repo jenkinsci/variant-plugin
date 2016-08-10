@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.jvnet.hudson.test.Issue;
 import org.jvnet.hudson.test.JenkinsRule;
 
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ import java.util.List;
 public class VariantTest extends Assert {
     @Rule
     public JenkinsRule j = new JenkinsRule();
-
 
     @BeforeClass
     public static void setUp() {
@@ -47,4 +47,23 @@ public class VariantTest extends Assert {
         assertTrue(!classes.contains(Negative5.class));
         assertTrue(!classes.contains(Negative6.class));
     }
+
+    @Test
+    @Issue("JENKINS-37317")
+    public void testRequiredClass() {
+        List<Class> classes = new ArrayList<Class>();
+        for (Action a : j.jenkins.getActions()) {
+            classes.add(a.getClass());
+        }
+        assertTrue("Negative 3 should not exist", !classes.contains(Negative3.class));
+
+        for (Class klass : classes) {
+            System.out.println(klass.getCanonicalName());
+            assertTrue("Negative 4 should not exist",
+                    !klass.getCanonicalName().equals("org.jenkinsci.plugins.variant.Negative4"));
+        }
+
+        assertTrue(classes.contains(Positive4.class));
+    }
+
 }
