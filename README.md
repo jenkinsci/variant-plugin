@@ -1,10 +1,12 @@
 # Variant plugin
 This plugin allows Jenkins plugins to behave differently based on the "environment" it is running in.
 
+See also  http://plugins.jenkins.io/variant
+
 ## Optional Extension
 With this plugin, you define environment sensitive extension by marking your extension as `@OptionalExtension`
 that specifies the condition of activation.
- 
+
 ```
 @OptionalExtension(requirePlugins="git")
 public class Foo implements ... {
