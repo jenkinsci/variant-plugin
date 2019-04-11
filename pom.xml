@@ -6,7 +6,7 @@
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
     <!-- Baseline Jenkins version you use to build and test the plugin. Users must have this version or newer to run. -->
-    <version>2.36</version>
+    <version>3.42</version>
     <relativePath />
   </parent>
   <artifactId>variant</artifactId>
@@ -71,7 +71,7 @@
       </plugins>
     </build>
   <properties>
-    <jenkins.version>1.580.1</jenkins.version>
-    <java.level>6</java.level>
+    <jenkins.version>2.60.3</jenkins.version>
+    <java.level>8</java.level>
   </properties>
 </project>
