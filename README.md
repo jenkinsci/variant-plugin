@@ -1,13 +1,18 @@
 # Variant plugin
 This plugin allows Jenkins plugins to behave differently based on the "environment" it is running in.
 
-See also  http://plugins.jenkins.io/variant
+## Annotations
+`@OptionalExtension` and `@OptionalPackage` annotations can be used to
+define a set of required:
+-   Plugins.
+-   Classes.
+-   Variants.
 
-## Optional Extension
+### Optional Extension - @OptionalExtension
 With this plugin, you define environment sensitive extension by marking your extension as `@OptionalExtension`
 that specifies the condition of activation.
 
-```
+```java
 @OptionalExtension(requirePlugins="git")
 public class Foo implements ... {
    ...
@@ -20,7 +25,7 @@ Optional extensions can be activated by one of the following conditions:
 * Presence of a class
 * Presence of a "variant" in the environment.
 
-### Package for optional extension
+### Package for optional extension - @OptionalPackage
 
 
 ## Activating variants
@@ -38,7 +43,6 @@ All of the variants activated in these different ways are combined together to f
   This whitespace separated list of variant names is intended to be used by people who create
   custom distributions of Jenkins.
 
-
 ## Why
 This addition will allow more controlled extension enablement beyond `@Extension(optional=true)`. For example,
 it is often common for a plugin to define some additional integration extension that only kicks in when another
@@ -51,3 +55,8 @@ Center."
 This mechanism also lets us define multi-modal plugin that can run in such variants and behave differently.
 In this way, we can use the same plugin across different variants of Jenkins, so that users can think of this as
 installing one plugin in the whole network of Jenkins variants.
+
+## Changelog
+For recent versions, see [GitHub Releases](https://github.com/jenkinsci/variant-plugin/releases)
+
+For versions 1.2 and older, see see CHANGELOG.md
