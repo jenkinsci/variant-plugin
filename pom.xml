@@ -55,6 +55,12 @@
       <version>2.1.10</version>
       <type>hpi</type>
       <scope>test</scope>
+      <exclusions>
+        <exclusion> <!-- coming from the core anyway -->
+          <groupId>org.jenkins-ci</groupId>
+          <artifactId>symbol-annotation</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
  <build>
