@@ -41,6 +41,17 @@
       <url>https://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.jenkins.tools.bom</groupId>
+        <artifactId>bom-2.319.x</artifactId>
+        <version>1500.ve4d05cd32975</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
@@ -52,11 +63,10 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>credentials</artifactId>
-      <version>1087.1089.v2f1b_9a_b_040e4</version>
-      <type>hpi</type>
       <scope>test</scope>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
         <plugin>
