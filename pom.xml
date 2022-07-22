@@ -52,7 +52,7 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>credentials</artifactId>
-      <version>1139.veb_9579fca_33b_</version>
+      <version>1087.1089.v2f1b_9a_b_040e4</version>
       <type>hpi</type>
       <scope>test</scope>
     </dependency>
@@ -74,6 +74,6 @@
     <revision>1.5</revision>
     <changelist>-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
-    <jenkins.version>2.289.3</jenkins.version>
+    <jenkins.version>2.319.3</jenkins.version>
   </properties>
 </project>
