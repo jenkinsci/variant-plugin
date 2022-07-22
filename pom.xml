@@ -55,12 +55,6 @@
       <version>1139.veb_9579fca_33b_</version>
       <type>hpi</type>
       <scope>test</scope>
-      <exclusions>
-        <exclusion> <!-- coming from the core anyway -->
-          <groupId>org.jenkins-ci</groupId>
-          <artifactId>symbol-annotation</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
   <build>
