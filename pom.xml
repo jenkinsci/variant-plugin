@@ -45,7 +45,7 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>beer</artifactId>
-      <version>30.v71254f39d447</version>
+      <version>beer-1.3</version>
       <optional>true</optional>
       <scope>test</scope>
     </dependency>
