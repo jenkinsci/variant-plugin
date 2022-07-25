@@ -67,23 +67,11 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <configuration>
-            <classpathDependencyExcludes>
-              <classpathDependencyExcludes>org.jenkins-ci.plugins:beer</classpathDependencyExcludes>
-            </classpathDependencyExcludes>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
   <properties>
     <revision>1.5</revision>
     <changelist>-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
     <jenkins.version>2.319.3</jenkins.version>
+    <maven.test.dependency.excludes>org.jenkins-ci.plugins:beer</maven.test.dependency.excludes>
   </properties>
 </project>
