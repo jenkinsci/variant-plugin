@@ -6,11 +6,11 @@
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
     <!-- Baseline Jenkins version you use to build and test the plugin. Users must have this version or newer to run. -->
-    <version>4.15</version>
+    <version>4.44</version>
     <relativePath />
   </parent>
   <artifactId>variant</artifactId>
-  <version>1.5-SNAPSHOT</version>
+  <version>${changelist}</version>
   <packaging>hpi</packaging>
 
   <name>Variant Plugin</name>
@@ -24,10 +24,10 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
-    <url>http://github.com/jenkinsci/${project.artifactId}-plugin</url>
-    <tag>HEAD</tag>
+    <connection>scm:git:https://github.com/${gitHubRepo}.git</connection>
+    <developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
+    <url>http://github.com/${gitHubRepo}</url>
+    <tag>${scmTag}</tag>
   </scm>
   <repositories>
     <repository>
@@ -41,43 +41,36 @@
       <url>https://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.jenkins.tools.bom</groupId>
+        <artifactId>bom-2.319.x</artifactId>
+        <version>1500.ve4d05cd32975</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>beer</artifactId>
-      <version>1.2</version>
+      <version>1.3</version>
       <optional>true</optional>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>credentials</artifactId>
-      <version>2.3.14</version>
-      <type>hpi</type>
       <scope>test</scope>
-      <exclusions>
-        <exclusion> <!-- coming from the core anyway -->
-          <groupId>org.jenkins-ci</groupId>
-          <artifactId>symbol-annotation</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
- <build>
-    <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <configuration>
-            <classpathDependencyExcludes>
-              <classpathDependencyExcludes>org.jenkins-ci.plugins:beer</classpathDependencyExcludes>
-            </classpathDependencyExcludes>
-          </configuration>
-        </plugin>
-      </plugins>
-    </build>
+
   <properties>
-    <jenkins.version>2.249.1</jenkins.version>
-    <java.level>8</java.level>
+    <changelist>999999-SNAPSHOT</changelist>
+    <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
+    <jenkins.version>2.319.3</jenkins.version>
+    <maven.test.dependency.excludes>org.jenkins-ci.plugins:beer</maven.test.dependency.excludes>
   </properties>
 </project>
