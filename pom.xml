@@ -10,7 +10,7 @@
     <relativePath />
   </parent>
   <artifactId>variant</artifactId>
-  <version>${revision}${changelist}</version>
+  <version>${changelist}</version>
   <packaging>hpi</packaging>
 
   <name>Variant Plugin</name>
@@ -68,8 +68,7 @@
   </dependencies>
 
   <properties>
-    <revision>1.5</revision>
-    <changelist>-SNAPSHOT</changelist>
+    <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
     <jenkins.version>2.319.3</jenkins.version>
     <maven.test.dependency.excludes>org.jenkins-ci.plugins:beer</maven.test.dependency.excludes>
