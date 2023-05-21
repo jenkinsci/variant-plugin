@@ -6,7 +6,7 @@
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
     <!-- Baseline Jenkins version you use to build and test the plugin. Users must have this version or newer to run. -->
-    <version>4.44</version>
+    <version>4.63</version>
     <relativePath />
   </parent>
   <artifactId>variant</artifactId>
@@ -45,8 +45,8 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.319.x</artifactId>
-        <version>1508.v4b_d09ff0e893</version>
+        <artifactId>bom-2.361.x</artifactId>
+        <version>2081.v85885a_d2e5c5</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -70,7 +70,7 @@
   <properties>
     <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
-    <jenkins.version>2.319.3</jenkins.version>
+    <jenkins.version>2.361.4</jenkins.version>
     <maven.test.dependency.excludes>org.jenkins-ci.plugins:beer</maven.test.dependency.excludes>
   </properties>
 </project>
