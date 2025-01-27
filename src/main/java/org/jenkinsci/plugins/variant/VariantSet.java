@@ -60,7 +60,7 @@ public class VariantSet {
 
         Jenkins j = Jenkins.getInstance();
         if (j!=null) {
-            InputStream in = j.servletContext.getResourceAsStream("META-INF/MANIFEST.MF");
+            InputStream in = j.getServletContext().getResourceAsStream("META-INF/MANIFEST.MF");
             try {
                 if (in != null) {
                     Manifest m = new Manifest(in);
