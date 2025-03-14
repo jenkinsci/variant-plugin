@@ -3,7 +3,6 @@ package org.jenkinsci.plugins.variant;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Member;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.Extension;
 import hudson.ExtensionFinder.GuiceExtensionAnnotation;
 import hudson.PluginWrapper;
@@ -75,7 +74,6 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
         return true;
     }
 
-    @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     // this function and isActive(OptionalPackage) should be kept identical
     private boolean isActive(OptionalExtension a) {
         try {
@@ -99,7 +97,6 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
         return true;
     }
 
-    @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     // this function and isActive(OptionalExtension) should be kept identical
     private boolean isActive(OptionalPackage a) {
         try {
