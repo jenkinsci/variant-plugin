@@ -2,6 +2,8 @@ package org.jenkinsci.plugins.variant;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Member;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import hudson.Extension;
 import hudson.ExtensionFinder.GuiceExtensionAnnotation;
@@ -15,6 +17,9 @@ import jenkins.model.Jenkins;
  */
 @Extension
 public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<OptionalExtension> {
+
+    private static final Logger LOGGER = Logger.getLogger(OptionalExtensionProcessor.class.getName());
+
     public OptionalExtensionProcessor() {
         super(OptionalExtension.class);
     }
@@ -48,10 +53,13 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
         for (; e != null; e = getParentOf(e)) {
             try {
                 OptionalExtension a = e.getAnnotation(OptionalExtension.class);
-                if (a != null && !isActive(a)) {
-                    return false;
+                if (a != null) {
+                    warnIfAlsoMarkedWithExtension(e);
+                    if (!isActive(a)) {
+                        return false;
+                    }
                 }
-            } catch (ArrayStoreException e1) {
+            } catch (ArrayStoreException | TypeNotPresentException e1) {
                 // In this case the annotation is referencing a non existent class, make the extension inactive it is
                 // due to the use of requiredClasses
                 // see http://bugs.java.com/view_bug.do?bug_id=7183985
@@ -63,7 +71,7 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
                 if (b != null && !isActive(b)) {
                     return false;
                 }
-            } catch (ArrayStoreException e1) {
+            } catch (ArrayStoreException | TypeNotPresentException e1) {
                 // In this case the annotation is referencing a non existent class, make the extension inactive it is
                 // due to the use of requiredClasses
                 // see http://bugs.java.com/view_bug.do?bug_id=7183985
@@ -72,6 +80,27 @@ public class OptionalExtensionProcessor extends GuiceExtensionAnnotation<Optiona
         }
 
         return true;
+    }
+
+    /**
+     * {@link OptionalExtension} is a full replacement for {@link Extension}: it is itself indexed by Jenkins
+     * and does not need (and must not be combined with) a plain {@link Extension} annotation on the same
+     * element. If both are present, Jenkins core will discover and activate the element through the plain
+     * {@link Extension} annotation unconditionally, completely bypassing the activation conditions declared
+     * on {@link OptionalExtension} (e.g. {@link OptionalExtension#requirePlugins()}). This is a common mistake,
+     * so warn loudly to help developers notice it.
+     *
+     * @see <a href="https://issues.jenkins-ci.org/browse/JENKINS-58302">JENKINS-58302</a>
+     */
+    private void warnIfAlsoMarkedWithExtension(AnnotatedElement e) {
+        if (e.getAnnotation(Extension.class) != null) {
+            LOGGER.log(Level.WARNING,
+                    "{0} is annotated with both @Extension and @OptionalExtension. "
+                    + "@OptionalExtension already causes the element to be indexed as an extension, "
+                    + "so the plain @Extension annotation must be removed, otherwise the activation "
+                    + "conditions declared on @OptionalExtension will be ignored.",
+                    e);
+        }
     }
 
     // this function and isActive(OptionalPackage) should be kept identical

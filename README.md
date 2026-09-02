@@ -25,6 +25,12 @@ Optional extensions can be activated by one of the following conditions:
 * Presence of a class
 * Presence of a "variant" in the environment.
 
+`@OptionalExtension` is a replacement for, not an addition to, the plain `@Extension`
+annotation. Do **not** annotate a class with both `@Extension` and `@OptionalExtension`:
+Jenkins core will still discover and activate the class through the plain `@Extension`
+annotation, unconditionally, bypassing the activation conditions declared on
+`@OptionalExtension` (see [JENKINS-58302](https://issues.jenkins.io/browse/JENKINS-58302)).
+
 ### Package for optional extension - @OptionalPackage
 
 
